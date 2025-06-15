@@ -1,0 +1,134 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Quill",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#dialog-keywords"
+		},
+		{
+			"include": "#character-dialog"
+		},
+		{
+			"include": "#labels"
+		},
+		{
+			"include": "#choices"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.quill",
+				"match": "\\b(if|while|for|return)\\b"
+			}]
+		},
+		"dialog-keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.dialog.quill",
+					"match": "\\b(LABEL|CHOICE|GOTO|END)\\b"
+				}
+			]
+		},
+		"character-dialog": {
+			"patterns": [
+				{
+					"match": "^\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*:\\s*(\"[^\"]*\"|\\[)",
+					"captures": {
+						"1": {
+							"name": "entity.name.function.character.quill"
+						}
+					}
+				}
+			]
+		},
+		"labels": {
+			"patterns": [
+				{
+					"match": "\\b(LABEL)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+					"captures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						},
+						"2": {
+							"name": "entity.name.label.quill"
+						}
+					}
+				},
+				{
+					"match": "\\b(GOTO)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+					"captures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						},
+						"2": {
+							"name": "entity.name.label.reference.quill"
+						}
+					}
+				}
+			]
+		},
+		"choices": {
+			"patterns": [
+				{
+					"name": "meta.choice.quill",
+					"begin": "\\{",
+					"end": "\\}",
+					"patterns": [
+						{
+							"include": "#dialog-keywords"
+						},
+						{
+							"include": "#character-dialog"
+						},
+						{
+							"include": "#labels"
+						},
+						{
+							"include": "#strings"
+						}
+					]
+				},
+				{
+					"name": "meta.choice-options.quill",
+					"begin": "\\[",
+					"end": "\\]",
+					"patterns": [
+						{
+							"include": "#strings"
+						}
+					]
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.quill",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.quill",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.hash.quill",
+					"match": "#.*$"
+				}
+			]
+		}
+	},
+	"scopeName": "source.quill"
+}

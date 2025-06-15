@@ -1,6 +1,6 @@
 {
-  "name": "quill",
-  "displayName": "quill",
+  "name": "quill-vscode",
+  "displayName": "Quill Language Support",
   "description": "Dialog Language",
   "version": "0.0.1",
   "engines": {

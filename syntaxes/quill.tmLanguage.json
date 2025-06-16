@@ -15,6 +15,9 @@
 			"include": "#dialog-keywords"
 		},
 		{
+			"include": "#random-blocks"
+		},
+		{
 			"include": "#character-dialog"
 		},
 		{
@@ -35,7 +38,41 @@
 			"patterns": [
 				{
 					"name": "keyword.control.dialog.quill",
-					"match": "\\b(LABEL|CHOICE|GOTO|END)\\b"
+					"match": "\\b(LABEL|CHOICE|GOTO|END|RANDOM)\\b"
+				}
+			]
+		},
+		"random-blocks": {
+			"patterns": [
+				{
+					"name": "meta.random-block.quill",
+					"begin": "\\b(RANDOM)\\s*\\{",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						}
+					},
+					"end": "\\}",
+					"patterns": [
+						{
+							"include": "#comments"
+						},
+						{
+							"include": "#choices"
+						},
+						{
+							"include": "#character-dialog"
+						},
+						{
+							"include": "#dialog-keywords"
+						},
+						{
+							"include": "#labels"
+						},
+						{
+							"include": "#strings"
+						}
+					]
 				}
 			]
 		},
@@ -43,6 +80,17 @@
 			"patterns": [
 				{
 					"match": "^\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*:\\s*(\"[^\"]*\")",
+					"captures": {
+						"1": {
+							"name": "entity.name.function.character.quill"
+						},
+						"2": {
+							"name": "string.quoted.double.quill"
+						}
+					}
+				},
+				{
+					"match": "([A-Za-z_][A-Za-z0-9_]*)\\s*:\\s*(\"[^\"]*\")",
 					"captures": {
 						"1": {
 							"name": "entity.name.function.character.quill"

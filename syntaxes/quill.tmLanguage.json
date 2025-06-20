@@ -6,13 +6,22 @@
 			"include": "#comments"
 		},
 		{
+			"include": "#let-declarations"
+		},
+		{
 			"include": "#strings"
+		},
+		{
+			"include": "#conditionals"
 		},
 		{
 			"include": "#keywords"
 		},
 		{
 			"include": "#dialog-keywords"
+		},
+		{
+			"include": "#system-messages"
 		},
 		{
 			"include": "#random-blocks"
@@ -25,6 +34,15 @@
 		},
 		{
 			"include": "#choices"
+		},
+		{
+			"include": "#assignments"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#literals"
 		},
 		{
 			"include": "#tags"
@@ -41,7 +59,136 @@
 			"patterns": [
 				{
 					"name": "keyword.control.dialog.quill",
-					"match": "\\b(LABEL|CHOICE|GOTO|END|RANDOM)\\b"
+					"match": "\\b(LABEL|CHOICE|GOTO|END|RANDOM|LET|IF|ELSE|SYSTEM)\\b"
+				}
+			]
+		},
+		"let-declarations": {
+			"patterns": [
+				{
+					"match": "\\b(LET)\\s+([A-Za-z_][A-Za-z0-9_]*)\\s*(=)",
+					"captures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						},
+						"2": {
+							"name": "variable.name.quill"
+						},
+						"3": {
+							"name": "keyword.operator.assignment.quill"
+						}
+					}
+				}
+			]
+		},
+		"system-messages": {
+			"patterns": [
+				{
+					"match": "\\b(SYSTEM)\\s*:\\s*(\"[^\"]*\")",
+					"captures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						},
+						"2": {
+							"name": "string.quoted.double.system.quill"
+						}
+					}
+				}
+			]
+		},
+		"conditionals": {
+			"patterns": [
+				{
+					"name": "meta.conditional.quill",
+					"begin": "\\b(IF)\\s+",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						}
+					},
+					"end": "\\{",
+					"patterns": [
+						{
+							"include": "#operators"
+						},
+						{
+							"include": "#literals"
+						},
+						{
+							"include": "#variable-references"
+						}
+					]
+				},
+				{
+					"name": "meta.else.quill",
+					"begin": "\\}\\s*(ELSE)\\s*\\{",
+					"beginCaptures": {
+						"1": {
+							"name": "keyword.control.dialog.quill"
+						}
+					},
+					"end": "(?=\\})",
+					"patterns": [
+						{
+							"include": "#dialog-keywords"
+						},
+						{
+							"include": "#character-dialog"
+						},
+						{
+							"include": "#labels"
+						},
+						{
+							"include": "#assignments"
+						}
+					]
+				}
+			]
+		},
+		"assignments": {
+			"patterns": [
+				{
+					"match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(\\+=|\\-=|\\*=|\\/=|=)",
+					"captures": {
+						"1": {
+							"name": "variable.name.quill"
+						},
+						"2": {
+							"name": "keyword.operator.assignment.quill"
+						}
+					}
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.comparison.quill",
+					"match": "(>=|<=|==|!=|>|<)"
+				},
+				{
+					"name": "keyword.operator.arithmetic.quill",
+					"match": "(\\+|\\-|\\*|\\/|%)"
+				}
+			]
+		},
+		"literals": {
+			"patterns": [
+				{
+					"name": "constant.language.boolean.quill",
+					"match": "\\b(TRUE|FALSE)\\b"
+				},
+				{
+					"name": "constant.numeric.quill",
+					"match": "\\b\\d+(\\.\\d+)?\\b"
+				}
+			]
+		},
+		"variable-references": {
+			"patterns": [
+				{
+					"name": "variable.other.quill",
+					"match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
 				}
 			]
 		},
@@ -164,6 +311,12 @@
 					},
 					"patterns": [
 						{
+							"include": "#conditionals"
+						},
+						{
+							"include": "#assignments"
+						},
+						{
 							"include": "#dialog-keywords"
 						},
 						{
@@ -195,6 +348,12 @@
 					},
 					"patterns": [
 						{
+							"include": "#conditionals"
+						},
+						{
+							"include": "#assignments"
+						},
+						{
 							"include": "#dialog-keywords"
 						},
 						{
@@ -221,6 +380,10 @@
 				{
 					"name": "constant.character.escape.quill",
 					"match": "\\\\."
+				},
+				{
+					"name": "variable.interpolation.quill",
+					"match": "\\{[A-Za-z_][A-Za-z0-9_]*\\}"
 				}
 			]
 		},
@@ -236,7 +399,7 @@
 			"patterns": [
 				{
 					"name": "entity.name.tag.quill",
-						"match": "\\[[^\\]]*\\]"
+					"match": "\\[[^\\]]*\\]"
 				}
 			]
 		}
